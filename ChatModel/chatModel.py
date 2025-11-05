@@ -4,19 +4,14 @@ from groq import Groq
 
 load_dotenv()
 
-client = Groq(
-    api_key=os.getenv("GROQ_API_KEY")
-)
+client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
-def ask(query):
+def ask(query,model='llama-3.1-8b-instant',temperature=0.2):
    chat_completion = client.chat.completions.create(
-    messages=[
-        {
-            "role": "user",
-            "content": query,
-        }
-    ],
-    model="llama-3.1-8b-instant",
+    messages=[{"role": "user","content": query,}],
+    model=model,
+    temperature=temperature,     # (0-0.3 makes model more deterministic)  & (0.7 to 1 model more random and creative)
     )
+   response=chat_completion.choices[0].message.content
 
-   print(chat_completion.choices[0].message.content)
+   return response
